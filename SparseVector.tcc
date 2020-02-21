@@ -11,13 +11,16 @@ template <class T>
 void SparseVector<T>::insert(size_t i, const T &elem) {
     size_t idx;
     if (r.contains(i)) {
-        idx = r.rank(i);
+        idx = r.rank(i) - 1;
         v[i] = elem;
     } else {
-        r.add(i);
         idx = r.rank(i);
-        if (v.size() < idx) v.resize(idx);
-        v.emplace(v.begin() + idx, elem);
+        r.add(i);
+        if (v.size() == idx) {
+            v.push_back(elem);
+        } else {
+            v.emplace(v.begin() + idx, elem);
+        }
     }
 }
 
@@ -28,7 +31,7 @@ template <class T>
 T SparseVector<T>::remove(size_t i) {
     T t;
     if (r.contains(i)) {
-        size_t idx = r.rank(i);
+        size_t idx = r.rank(i) - 1;
         t = v[idx];
         r.remove(i);
         v.erase(v.begin()+idx);
@@ -45,7 +48,7 @@ void getElements(std::vector<std::pair<size_t, T> > &elems) {
 template <class T>
 T SparseVector<T>::get(size_t i) const {
     if (r.contains(i)) {
-        return v[r.rank(i)];
+        return v[r.rank(i) - 1];
     }
     return T();
 }
@@ -54,7 +57,7 @@ T SparseVector<T>::get(size_t i) const {
 template <class T>
 T SparseVector<T>::get(size_t i, const T &def) const {
     if (r.contains(i)) {
-        return v[r.rank(i)];
+        return v[r.rank(i) - 1];
     }
     return def;
 }
@@ -72,7 +75,7 @@ bool SparseVector<T>::isEmpty() const {
 template <class T>
 T& SparseVector<T>::operator[] (size_t i) {
     if (r.contains(i)) {
-        return v[r.rank(i)];
+        return v[r.rank(i) - 1];
     }
     throw std::invalid_argument("Index not present in SparseVector.");
 }
@@ -80,7 +83,7 @@ T& SparseVector<T>::operator[] (size_t i) {
 template <class T>
 const T& SparseVector<T>::operator[] (size_t i) const {
     if (r.contains(i)) {
-        return v[r.rank(i)];
+        return v[r.rank(i) - 1];
     }
     throw std::invalid_argument("Index not present in SparseVector.");
 }
