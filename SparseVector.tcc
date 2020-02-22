@@ -40,8 +40,14 @@ T SparseVector<T>::remove(size_t i) {
 }
 
 template <class T>
-void getElements(std::vector<std::pair<size_t, T> > &elems) {
-    
+void getElements(std::vector<std::pair<uint32_t, T> > &elems) {
+    elems.reserve(r.cardinality());
+    uint32_t idx;
+    for (size_t i = 0; i < v.size(); ++i) {
+        if (r.select(i, idx)) {
+            elems.push_back(std::pair<uint32_t, T>(idx, v[i]));
+        }
+    }
 }
 
 // Returns a new T if element is not in the sparse vector
