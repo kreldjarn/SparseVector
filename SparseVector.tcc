@@ -44,7 +44,7 @@ void SparseVector<T>::getElements(std::vector<std::pair<uint32_t, T> > &elems) {
     elems.reserve(r.cardinality());
     uint32_t idx;
     for (size_t i = 0; i < v.size(); ++i) {
-        if (r.select(i, idx)) {
+        if (r.select(i, &idx)) {
             elems.push_back(std::pair<uint32_t, T>(idx, v[i]));
         }
     }
