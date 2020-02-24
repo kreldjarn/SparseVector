@@ -40,7 +40,7 @@ T SparseVector<T>::remove(size_t i) {
 }
 
 template <class T>
-void getElements(std::vector<std::pair<uint32_t, T> > &elems) {
+void SparseVector<T>::getElements(std::vector<std::pair<uint32_t, T> > &elems) {
     elems.reserve(r.cardinality());
     uint32_t idx;
     for (size_t i = 0; i < v.size(); ++i) {
