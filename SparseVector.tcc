@@ -42,11 +42,10 @@ T SparseVector<T>::remove(size_t i) {
 template <class T>
 void SparseVector<T>::getElements(std::vector<std::pair<uint32_t, T> > &elems) {
     elems.reserve(r.cardinality());
-    uint32_t idx;
-    for (size_t i = 0; i < v.size(); ++i) {
-        if (r.select(i, &idx)) {
-            elems.push_back(std::pair<uint32_t, T>(idx, v[i]));
-        }
+    uint32_t i = 0;
+    for (const auto &idx : r) {
+        elems.push_back(std::pair<uint32_t, T>(idx, v[i]));
+        ++i;
     }
 }
 
