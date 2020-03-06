@@ -4,6 +4,26 @@ SparseVector<T>::SparseVector() {
     r = Roaring();
 }
 
+template <class T>
+SparseVector<T>::SparseVector(SparseVector<T> &&arg) : r(std::move(arg.r)), v(std::move(arg.v)) {};
+
+template <class T>
+SparseVector<T>::SparseVector(const SparseVector<T> &arg) : r(arg.r), v(arg.v) {};
+
+template <class T>
+SparseVector<T>& SparseVector<T>::operator=(SparseVector<T> &&other) {
+    r = std::move(other.r);
+    v = std::move(other.v);
+    return *this;
+}
+
+template <class T>
+SparseVector<T>& SparseVector<T>::operator=(const SparseVector<T> &other) {
+    r = other.r;
+    v = other.v;
+    return *this;
+}
+
 // Warning:
 // Worst case performance is O(N).
 // It is recommended to insert items in order of ascending indices.
@@ -24,6 +44,11 @@ void SparseVector<T>::insert(size_t i, const T &elem) {
     }
 }
 
+template <class T>
+void SparseVector<T>::insert(const std::pair<size_t, T> &elem) {
+    insert(elem.first, elem.second);
+}
+
 // Warning:
 // Worst case performance is O(N).
 // It is recommended to remove items in order of descending indices.
@@ -40,7 +65,14 @@ T SparseVector<T>::remove(size_t i) {
 }
 
 template <class T>
+void SparseVector<T>::clear() {
+    v.clear();
+    r = Roaring();
+}
+
+template <class T>
 void SparseVector<T>::getElements(std::vector<std::pair<uint32_t, T> > &elems) {
+    if (r.isEmpty()) return;
     elems.reserve(r.cardinality());
     uint32_t i = 0;
     for (const auto &idx : r) {
