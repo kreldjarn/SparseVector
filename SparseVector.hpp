@@ -1,5 +1,5 @@
 #include <vector>
-#include <bifrost/roaring.hh>
+#include "roaring.hh"
 
 template <class T>
 class SparseVector {
